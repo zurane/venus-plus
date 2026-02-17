@@ -3,8 +3,6 @@ import { Link, useNavigate } from 'react-router';
 import Loader from '../components/Loader.js';
 import { useState } from 'react';
 
-
-
 export default function SignUp() {
   const [apiErrors, setApiErrors] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -12,6 +10,7 @@ export default function SignUp() {
 
   const handleSubmit = (values) => {
     const { name, email, password } = values; // destructure the values from the form
+
     const registerUser = async () => {
       try {
         setApiErrors(''); // Clear previous errors
@@ -23,14 +22,18 @@ export default function SignUp() {
           body: JSON.stringify({ name, email, password })
         });
         const data = await response.json();
+
+
         if (!response.ok) {
           setApiErrors(data.message || 'Could not process your actions. Please try again.');
         } else {
+
           setIsLoading(true);
           setTimeout(() => {
             navigate('/dashboard');
           }, 3000);
         }
+
       } catch (error) {
         console.error('Error registering user:', error);
         setApiErrors(error.message || 'An error occurred. Please try again.');
@@ -38,10 +41,9 @@ export default function SignUp() {
     }
     registerUser();
   }
+
   return (
-    <div style={{
-      background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #010133 100%)",
-    }} className='h-screen'>
+    <div  className='h-screen custom-bg'>
       <div className=''>
         <div className='flex items-center justify-center h-screen bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay'>
           {isLoading ? (

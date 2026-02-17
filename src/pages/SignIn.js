@@ -7,12 +7,13 @@ import { useState } from 'react';
 export default function SignIn() {
     const [apiErrors, setApiErrors] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [user, setUser] = useState(null);
     const navigate = useNavigate();
+
 
     const handleSubmit = (values) => {
 
         const { email, password } = values; // destructure the values from the form
-
         const registerUser = async () => {
             try {
                 setApiErrors(''); // Clear previous errors
@@ -23,16 +24,19 @@ export default function SignIn() {
                     },
                     body: JSON.stringify({ email, password })
                 });
+
                 const data = await response.json();
 
                 if (!response.ok) {
                     setApiErrors(data.message || 'Could not process your actions. Please try again.');
                 } else {
-                    console.log(data);
+
+                    setUser(data.data.user.name);
                     setIsLoading(true);
                     setTimeout(() => {
                         navigate('/dashboard');
                     }, 3000);
+
                 }
             } catch (error) {
                 console.error('Error signing in user:', error);
@@ -42,17 +46,13 @@ export default function SignIn() {
         registerUser();
     }
     return (
-        <div style={{
-            background: "radial-gradient(125% 125% at 50% 100%, #000000 40%, #010133 100%)",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-        }} className='h-screen'>
+        <div className='h-screen custom-bg'>
             <div className=''>
                 <div className='flex items-center justify-center h-screen bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay'>
                     {isLoading ? (
                         <div className='flex flex-col items-center justify-center py-12'>
                             <div><Loader /></div>
-                            <p className='text-md text-white font-BeVietnam pt-4 tracking-tight font-semibold'>Welcome back</p>
+                            <p className='text-sm text-gray-300 mt-4'>{user && `Welcome ${user}`}</p>
                         </div>
                     ) : (
                         <Formik
