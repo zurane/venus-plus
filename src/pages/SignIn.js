@@ -27,6 +27,15 @@ export default function SignIn() {
 
                 const data = await response.json();
 
+                const checkifUserExists = await fetch(`https://subscription-tracker-api-e5u0.onrender.com/api/v1/users?email=${email}`);
+                const userData = await checkifUserExists.json();
+                const checkUser = userData.data.find(user => user.email === email && user.password === password);
+                
+                if (!checkUser) {
+                    setApiErrors('Invalid email or password. Please try again.');
+                    return;
+                }
+
                 if (!response.ok) {
                     setApiErrors(data.message || 'Could not process your actions. Please try again.');
                 } else {
