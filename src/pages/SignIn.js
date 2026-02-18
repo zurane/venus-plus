@@ -2,58 +2,44 @@ import { Formik } from 'formik';
 import { Link, useNavigate } from 'react-router';
 import Loader from '../components/Loader.js';
 import { useState } from 'react';
+import axios from 'axios';
 
 
 export default function SignIn() {
-    const [apiErrors, setApiErrors] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState(null);
     const navigate = useNavigate();
 
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
+        const { email, password } = values;
+        setErrorMessage('');
+        try {
+            const response = await axios.post('https://subscription-tracker-api-e5u0.onrender.com/api/v1/auth/sign-in', {
+                email,
+                password
+            });
+            const data = response.data;
+            setUser(data.data.user.name);
 
-        const { email, password } = values; // destructure the values from the form
-        const registerUser = async () => {
-            try {
-                setApiErrors(''); // Clear previous errors
-                const response = await fetch('https://subscription-tracker-api-e5u0.onrender.com/api/v1/auth/sign-in', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                const checkifUserExists = await fetch(`https://subscription-tracker-api-e5u0.onrender.com/api/v1/users?email=${email}`);
-                const userData = await checkifUserExists.json();
-                const checkUser = userData.data.find(user => user.email === email && user.password === password);
-                
-                if (!checkUser) {
-                    setApiErrors('Invalid email or password. Please try again.');
-                    return;
-                }
-
-                if (!response.ok) {
-                    setApiErrors(data.message || 'Could not process your actions. Please try again.');
-                } else {
-
-                    setUser(data.data.user.name);
-                    setIsLoading(true);
-                    setTimeout(() => {
-                        navigate('/dashboard');
-                    }, 3000);
-
-                }
-            } catch (error) {
-                console.error('Error signing in user:', error);
-                setApiErrors(error.message || 'An error occurred. Please try again.');
+            //only continue if the response is successful and contains the expected data
+            if (response && response.status === 200) {
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    navigate('/dashboard');
+                }, 3000);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                setErrorMessage('Invalid email or password. Please try again.');
+            } else {
+                setErrorMessage('User not found.');
             }
         }
-        registerUser();
-    }
+    };
+
     return (
         <div className='h-screen custom-bg'>
             <div className=''>
@@ -82,10 +68,9 @@ export default function SignIn() {
                                 }
                                 return errors;
                             }}
-                            onSubmit={(values, { setSubmitting, resetForm }) => {
+                            onSubmit={(values, { isSubmitting, resetForm }) => {
                                 handleSubmit(values);
-                                setIsLoading(true);
-                                setSubmitting(true);
+                                isSubmitting(false);
                                 resetForm();
                             }}
                         >
@@ -100,7 +85,7 @@ export default function SignIn() {
                                 /* and other goodies */
                             }) => (
                                 <form className='p-10 bg-white rounded shadow-lg' onSubmit={handleSubmit}>
-                                    {apiErrors && <div className='text-xs text-orange-600 border-l-4 py-5 px-3 mb-4 bg-red-100 border-orange-400 rounded-sm'>{apiErrors}</div>}
+                                    {errorMessage && <div className='text-xs text-orange-600 border-l-4 py-5 px-3 mb-4 bg-red-100 border-orange-400 rounded-sm'>{errorMessage}</div>}
                                     <div className='flex items-center justify-between gap-2 text-2xl font-bold my-8'><h4 className='font-BeVietnam tracking-tight'> Sign in</h4><Link to="/sign-up" className="text-sm text-blue-500 cursor-pointer border-b-2 border-blue-500">I don't have an account</Link></div>
                                     <input
                                         className='block py-4 px-1 w-96 bg-transparent border-b font-BeVietnam text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500  '
