@@ -1,17 +1,22 @@
 import { Formik } from "formik";
 import { Link, useNavigate } from "react-router";
 import Loader from "../components/Loader.js";
+import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
 import axios from "axios";
 
 export default function SignUp() {
   const [apiErrors, setApiErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
+  const [shake, setShake] = useState(false);
+
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     const { name, email, password } = values;
     setApiErrors("");
+    setIsFormSubmitting(true);
     try {
       const response = await axios.post(
         "https://subscription-tracker-api-e5u0.onrender.com/api/v1/auth/sign-up",
@@ -21,6 +26,8 @@ export default function SignUp() {
           password,
         },
       );
+
+      
       if (response && response.status === 201) {
         setIsLoading(true);
         setTimeout(() => {
@@ -29,6 +36,8 @@ export default function SignUp() {
         }, 3000);
       }
     } catch (error) {
+      setIsFormSubmitting(false);
+      setShake(true)
       if (error.response && error.response.status === 409) {
         setApiErrors("User with this email already exists.");
       } else {
@@ -38,7 +47,12 @@ export default function SignUp() {
   };
 
   return (
-    <div className="h-screen custom-bg">
+    <div className="h-screen custom-bg relative ">
+      <div className="px-10 py-5 fixed top-0 left-0 z-50 ">
+        <Link to="/" className="text-blue-500 hover:underline">
+          <img src={logo} className="App-logo" width={150} alt="logo" />
+        </Link>
+      </div>
       <div className="">
         <div className="flex items-center justify-center h-screen bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay">
           {isLoading ? (
@@ -46,10 +60,11 @@ export default function SignUp() {
               <div>
                 <Loader />
               </div>
+              <p className='text-sm text-gray-300 mt-4'>Welcome to Venus!</p>
             </div>
           ) : (
             <Formik
-              initialValues={{ name: "", email: "", password: "" }} // Set initial values for the form fields
+              initialValues={{ name: "", email: "", password: "" }}
               validate={(values) => {
                 const errors = {};
                 if (values.password.length < 6) {
@@ -69,9 +84,8 @@ export default function SignUp() {
                 }
                 return errors;
               }}
-              onSubmit={(values, { setSubmitting, resetForm }) => {
+              onSubmit={(values, { resetForm }) => {
                 handleSubmit(values);
-                setSubmitting(true);
                 resetForm();
               }}
             >
@@ -81,13 +95,24 @@ export default function SignUp() {
                 touched,
                 handleChange,
                 handleBlur,
-                handleSubmit,
+                handleSubmit: formikHandleSubmit,
+                validateForm,
+                submitForm,
                 isSubmitting,
-                /* and other goodies */
               }) => (
                 <form
-                  className="p-10 bg-white shadow-lg rounded"
-                  onSubmit={handleSubmit}
+                  className={`p-10 bg-white shadow-lg rounded ${shake ? "shake" : ""}`}
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const formErrors = await validateForm();
+                    if (formErrors && Object.keys(formErrors).length > 0) {
+                      setShake(true);
+                      setTimeout(() => setShake(false), 600);
+                      return;
+                    }
+                    // no validation errors -> submit the form
+                    await submitForm();
+                  }}
                 >
                   {apiErrors && (
                     <div className="text-xs text-orange-600 border-l-4 py-4 px-2 mb-4 bg-red-100 border-orange-400 rounded-sm">
@@ -141,12 +166,13 @@ export default function SignUp() {
                   </div>
 
                   <div className="text-center">
-                    <input
+                    <button
                       className="rounded-full hover:cursor-pointer w-96 shadow-md inset-shadow-sm shadow-blue-500/20 bg-gradient-to-r from-[#095ae6] to-[#062794] px-9 py-3 font-BeVietnam font-bold text-white my-3 disabled:opacity-50 disabled:cursor-not-allowed"
                       type="submit"
-                      disabled={isSubmitting}
-                      value="Continue to sign up"
-                    />
+                      disabled={isFormSubmitting}
+                    >
+                      {isFormSubmitting ? "Signing up..." : "Continue to sign up"}
+                    </button>
                   </div>
                 </form>
               )}
