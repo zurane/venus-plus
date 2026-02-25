@@ -30,7 +30,7 @@ export default function Landing() {
         </nav>
         <div className="absolute bottom-32">
           <h1 className="text-white font-BeVietnam w-3/4 leading-snug text-4xl font-extrabold mb-5">
-            Never Pay for a Forgotten Subscription Again.
+            Never pay for a forgotten subscription again.
           </h1>
           <button onClick={() => window.location.href = '/sign-up'} className="flex items-center gap-3 rounded-full shadow-md inset-shadow-sm shadow-blue-500/20 bg-gradient-to-r from-[#095ae6] to-[#062794] px-9 py-3 font-BeVietnam font-bold text-white my-3">
             Start Tracking Free
