@@ -45,7 +45,7 @@ const apiCall = async (endpoint, options = {}) => {
 
 // Subscription endpoints
 export const subscriptionsAPI = {
-  getAll: () => apiCall('/subscriptions'),
+  getAll: (userId) => apiCall(`/subscriptions/user/${userId}`),
   create: (data) => apiCall('/subscriptions', { method: 'POST', body: JSON.stringify(data) }),
   update: (id, data) => apiCall(`/subscriptions/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id) => apiCall(`/subscriptions/${id}`, { method: 'DELETE' }),

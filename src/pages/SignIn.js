@@ -30,7 +30,7 @@ export default function SignIn() {
       const Userdata = response.data;
       console.log("User data from API:", Userdata);
       setUsername(Userdata.data.user.name);
-
+      
       // persist token and user id so other pages can call APIs immediately
       const token = Userdata.token || Userdata.data?.token || Userdata.data?.accessToken;
       const userId = Userdata.data?.user?.id || Userdata.data?.user?._id || Userdata.data?.user?.user_id;

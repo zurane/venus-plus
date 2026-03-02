@@ -1,10 +1,9 @@
 import React from "react";
 import { Fragment } from "react";
 import { subscriptionsAPI } from "../services/api.js";
-import { PiDotsThreeVerticalBold, PiGearFine, PiSignOut, PiBell, PiCalendar, PiWallet,PiCaretDownThin } from "react-icons/pi";
+import { PiDotsThreeVerticalBold, PiGearFine, PiSignOut, PiBell, PiCalendar, PiWallet, PiCaretDownThin } from "react-icons/pi";
 import dayjs from "dayjs";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import SkeletonLoader from "../components/SkeletonLoader.js";
 
 export default function Dashboard() {
   const [subscriptions, setSubscriptions] = React.useState([]);
@@ -27,9 +26,10 @@ export default function Dashboard() {
 
   React.useEffect(() => {
     setIsLoading(true);
+    const id = JSON.parse(localStorage.getItem("venus_auth")).userId
     const fetchSubscriptions = async () => {
       try {
-        const res = await subscriptionsAPI.getAll();
+        const res = await subscriptionsAPI.getAll(id);
         // API returns { data: [...] }
         console.table(res);
         setSubscriptions(res || []);
@@ -44,116 +44,14 @@ export default function Dashboard() {
     fetchSubscriptions();
   }, []);
 
+  const data = subscriptions.data || []; // store the actual array of subscriptions for easier access
+
+
   return (
     <Fragment>
       <div className="h-screen dashboard-bg">
         {isLoading ? (
-          <SkeletonTheme
-           
-            duration={1.5}
-            direction="ltr"
-            enableAnimation={true}
-          >
-            <div className="max-w-6xl m-auto px-4 py-8">
-              <div>
-                <Skeleton
-                  width={200}
-                  height={30}
-                  className="mb-3 skeleton-shimmer"
-                />
-                <Skeleton width={150} height={20} className="skeleton-shimmer" />
-              </div>
-              <div className="grid grid-cols-3 gap-5 py-5 my-5">
-                <div className="p-4 rounded glassmorphism h-[120px]">
-                  <Skeleton
-                    width={150}
-                    height={20}
-                    className="mb-2 skeleton-shimmer"
-                  />
-                  <Skeleton width={100} height={30} className="skeleton-shimmer" />
-                </div>
-                <div className="p-4 rounded glassmorphism h-[120px]">
-                  <Skeleton
-                    width={150}
-                    height={20}
-                    className="mb-2 skeleton-shimmer"
-                  />
-                  <Skeleton width={100} height={30} className="skeleton-shimmer" />
-                </div>
-                <div className="p-4 rounded glassmorphism h-[120px]">
-                  <Skeleton
-                    width={150}
-                    height={20}
-                    className="mb-2 skeleton-shimmer"
-                  />
-                  <Skeleton width={100} height={30} className="skeleton-shimmer" />
-                </div>
-              </div>
-              <div className="p-4 rounded h-[400px] overflow-auto glassmorphism">
-                <Skeleton
-                  width={200}
-                  height={30}
-                  className="mb-3 skeleton-shimmer"
-                />
-                {subscriptions.length === 0 ? (
-                  <Skeleton width={200} height={20} className="skeleton-shimmer" />
-                ) : (
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr>
-                        <th className="border-b border-white/20 p-2">
-                          <Skeleton width={100} height={20} className="skeleton-shimmer" />
-                        </th>
-                        <th className="border-b border-white/20 p-2">
-                          <Skeleton width={100} height={20} className="skeleton-shimmer" />
-                        </th>
-                        <th className="border-b border-white/20 p-2">
-                          <Skeleton width={100} height={20} className="skeleton-shimmer" />
-                        </th>
-                        <th className="border-b border-white/20 p-2">
-                          <Skeleton width={100} height={20} className="skeleton-shimmer" />
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {subscriptions.map((sub) => (
-                        <tr className="border-b border-white/20" key={sub.id}>
-                          <td className="p-2">
-                            <Skeleton
-                              width={100}
-                              height={20}
-                              className="skeleton-shimmer"
-                            />
-                          </td>
-                          <td className="p-2">
-                            <Skeleton
-                              width={100}
-                              height={20}
-                              className="skeleton-shimmer"
-                            />
-                          </td>
-                          <td className="p-2">
-                            <Skeleton
-                              width={100}
-                              height={20}
-                              className="skeleton-shimmer"
-                            />
-                          </td>
-                          <td className="p-2">
-                            <Skeleton
-                              width={100}
-                              height={20}
-                              className="skeleton-shimmer"
-                            />
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
-            </div>
-          </SkeletonTheme>
+          <SkeletonLoader subscriptions={data} />
         ) : (
           <div className="max-w-6xl m-auto px-4 py-8">
             <div className="flex flex-row items-center justify-between">
@@ -179,17 +77,17 @@ export default function Dashboard() {
                     className=" hover:bg-gray-100 cursor-pointer py-3"
                   >
                     <div className="flex items-center gap-2 px-2">
-                        <PiGearFine size={20} className="text-gray-700"  />
-                        <span className="text-gray-700">Settings</span>
+                      <PiGearFine size={20} className="text-gray-700" />
+                      <span className="text-gray-700">Settings</span>
                     </div>
                   </div>
                   <div
-                    
+
                     className=" hover:bg-gray-100 cursor-pointer py-3 border-t"
                   >
                     <button className='flex items-center gap-2 px-2' onClick={signOut}>
                       <PiSignOut size={20} className="text-gray-700" />
-                    <span className="text-gray-700">Sign out</span>
+                      <span className="text-gray-700">Sign out</span>
                     </button>
                   </div>
                 </div>
@@ -201,7 +99,7 @@ export default function Dashboard() {
                   <div>
                     <p className="text-white">Your active subscriptions</p>
                     <p className="text-2xl font-bold text-white">
-                      {subscriptions.length}
+                      {data.length}
                     </p>
                   </div>
                   <PiBell size={32} className="text-purple-500" />
@@ -213,7 +111,7 @@ export default function Dashboard() {
                     <p className="text-white">Your upcoming renewals</p>
                     <p className="text-2xl font-bold text-white">
                       {
-                        subscriptions.filter(
+                        data.filter(
                           (sub) =>
                             sub.renewalDate &&
                             dayjs(sub.renewalDate).isAfter(dayjs()),
@@ -229,10 +127,9 @@ export default function Dashboard() {
                   <div>
                     <p className="text-white">Total spending (ZAR)</p>
                     <p className="text-2xl font-bold text-white">
-                      R{" "}
-                      {subscriptions
+                      R {data
                         .reduce((sum, sub) => sum + (sub.price || 0), 0)
-                        .toFixed(2)}
+                        .toFixed(2)}  
                     </p>
                   </div>
                   <PiWallet size={32} className="text-emerald-500" />
@@ -243,7 +140,7 @@ export default function Dashboard() {
               <h2 className="text-xl font-bold mb-3 text-white">
                 Your Subscriptions
               </h2>
-              {subscriptions.length === 0 ? (
+              {data.length === 0 ? (
                 <p className="text-white/80">You have no subscriptions yet.</p>
               ) : (
                 <table className="w-full text-left border-collapse">
@@ -261,7 +158,7 @@ export default function Dashboard() {
                     </tr>
                   </thead>
                   <tbody>
-                    {subscriptions.map((sub) => (
+                    {Array.isArray(data) && data.map((sub) => (
                       <tr className="border-b border-white/10" key={sub.id}>
                         <td className="py-4 px-2 text-white">{sub.name}</td>
                         <td className="p-2 text-white">
@@ -284,7 +181,7 @@ export default function Dashboard() {
                           </div>
                         </td>
                       </tr>
-                      
+
                     ))}
                   </tbody>
                 </table>
