@@ -101,7 +101,7 @@ export default function SignUp() {
                 isSubmitting,
               }) => (
                 <form
-                  className={`p-10 bg-white shadow-lg rounded ${shake ? "shake" : ""}`}
+                  className={`p-10 glassmorphism shadow-lg rounded ${shake ? "shake" : ""}`}
                   onSubmit={async (e) => {
                     e.preventDefault();
                     const formErrors = await validateForm();
@@ -120,7 +120,7 @@ export default function SignUp() {
                     </div>
                   )}
                   <div className="flex items-center justify-between gap-2 text-2xl font-bold my-8">
-                    <h4 className="font-BeVietnam tracking-tight"> Sign up</h4>
+                    <h4 className="font-BeVietnam tracking-tight text-white"> Sign up</h4>
                     <Link
                       to="/sign-in"
                       className="text-sm text-blue-500 cursor-pointer border-b-2 border-blue-500"
@@ -129,7 +129,7 @@ export default function SignUp() {
                     </Link>
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b  font-BeVietnam text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20  text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter full names"
                     type="text"
                     name="name"
@@ -141,7 +141,7 @@ export default function SignUp() {
                     {errors.name && touched.name && errors.name}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b font-BeVietnam text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20  text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter email address"
                     type="email"
                     name="email"
@@ -153,7 +153,7 @@ export default function SignUp() {
                     {errors.email && touched.email && errors.email}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b font-BeVietnam text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b  border-white/20 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter password"
                     type="password"
                     name="password"
@@ -167,7 +167,7 @@ export default function SignUp() {
 
                   <div className="text-center">
                     <button
-                      className="rounded-full hover:cursor-pointer w-96 shadow-md inset-shadow-sm shadow-blue-500/20 bg-gradient-to-r from-[#095ae6] to-[#062794] px-9 py-3 font-BeVietnam font-bold text-white my-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="rounded-full hover:cursor-pointer w-96 shadow-md  bg-gradient-to-r from-[#095ae6] to-[#062794] px-9 py-3 font-BeVietnam font-bold text-white my-5 disabled:opacity-50 disabled:cursor-not-allowed"
                       type="submit"
                       disabled={isFormSubmitting}
                     >

@@ -39,14 +39,13 @@ const apiCall = async (endpoint, options = {}) => {
     const error = await response.json().catch(() => ({ message: 'Error' }));
     throw new Error(error.message || `API error: ${response.status}`);
   }
-
   return response.json();
 };
 
 // Subscription endpoints
-export const subscriptionsAPI = {
-  getAll: (userId) => apiCall(`/subscriptions/user/${userId}`),
-  create: (data) => apiCall('/subscriptions', { method: 'POST', body: JSON.stringify(data) }),
+export const subscriptionsApiEndPoints = {
+  getSubData: (userId) => apiCall(`/subscriptions/user/${userId}`),
+  create: (userId, data) => apiCall('/subscriptions', { method: 'POST', body: JSON.stringify(data, userId) }),
   update: (id, data) => apiCall(`/subscriptions/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   delete: (id) => apiCall(`/subscriptions/${id}`, { method: 'DELETE' }),
 };

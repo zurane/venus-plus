@@ -18,7 +18,6 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </BrowserRouter>
-    // <Landing />
   );
 }
 export default App;
