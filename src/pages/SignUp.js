@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import { Link, useNavigate } from "react-router";
 import Loader from "../components/Loader.js";
+import { LuUserPlus } from "react-icons/lu";
 import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
 import axios from "axios";
@@ -10,10 +11,12 @@ export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [shake, setShake] = useState(false);
+  const [username, setUsername] = useState(" ");
 
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
+    //Destructure form data
     const { name, email, password } = values;
     setApiErrors("");
     setIsFormSubmitting(true);
@@ -26,8 +29,7 @@ export default function SignUp() {
           password,
         },
       );
-
-
+      setUsername(name);
       if (response && response.status === 201) {
         setIsLoading(true);
         setTimeout(() => {
@@ -37,7 +39,7 @@ export default function SignUp() {
       }
     } catch (error) {
       setIsFormSubmitting(false);
-      setShake(true)
+      setShake(true);
       if (error.response && error.response.status === 409) {
         setApiErrors("User with this email already exists.");
       } else {
@@ -60,7 +62,9 @@ export default function SignUp() {
               <div>
                 <Loader />
               </div>
-              <p className='text-sm text-gray-300 mt-4'>Welcome to Venus!</p>
+              <p className="text-sm text-gray-300 mt-4">
+                Welcome to {username}!
+              </p>
             </div>
           ) : (
             <Formik
@@ -101,7 +105,7 @@ export default function SignUp() {
                 isSubmitting,
               }) => (
                 <form
-                  className={`p-10 glassmorphism shadow-lg rounded ${shake ? "shake" : ""}`}
+                  className={`p-10 glassmorphism shadow-lg rounded`}
                   onSubmit={async (e) => {
                     e.preventDefault();
                     const formErrors = await validateForm();
@@ -119,8 +123,12 @@ export default function SignUp() {
                       {apiErrors}
                     </div>
                   )}
+                  <LuUserPlus className="text-white" size={32} />
                   <div className="flex items-center justify-between gap-2 text-2xl font-bold my-8">
-                    <h4 className="font-BeVietnam tracking-tight text-white"> Sign up</h4>
+                    <h4 className="font-BeVietnam tracking-tight text-white">
+                      {" "}
+                      Sign up
+                    </h4>
                     <Link
                       to="/sign-in"
                       className="text-sm text-blue-500 cursor-pointer border-b-2 border-blue-500"
@@ -129,7 +137,7 @@ export default function SignUp() {
                     </Link>
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20  text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-white/50 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter full names"
                     type="text"
                     name="name"
@@ -141,7 +149,7 @@ export default function SignUp() {
                     {errors.name && touched.name && errors.name}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20  text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-white/50  text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter email address"
                     type="email"
                     name="email"
@@ -153,7 +161,7 @@ export default function SignUp() {
                     {errors.email && touched.email && errors.email}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b  border-white/20 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b  border-white/20 text-white/50 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter password"
                     type="password"
                     name="password"
@@ -171,7 +179,9 @@ export default function SignUp() {
                       type="submit"
                       disabled={isFormSubmitting}
                     >
-                      {isFormSubmitting ? "Signing up..." : "Continue to sign up"}
+                      {isFormSubmitting
+                        ? "Signing up..."
+                        : "Continue to sign up"}
                     </button>
                   </div>
                 </form>

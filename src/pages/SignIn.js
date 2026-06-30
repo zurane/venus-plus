@@ -1,5 +1,6 @@
 import { Formik } from "formik";
 import { Link, useNavigate } from "react-router";
+import { LuLogIn } from "react-icons/lu";
 import Loader from "../components/Loader.js";
 import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
@@ -30,7 +31,7 @@ export default function SignIn() {
       const Userdata = response.data;
       console.log("User data from API:", Userdata);
       setUsername(Userdata.data.user.name);
-      
+
       // persist token and user id so other pages can call APIs immediately
       const token = Userdata.token || Userdata.data?.token || Userdata.data?.accessToken;
       const userId = Userdata.data?.user?.id || Userdata.data?.user?._id || Userdata.data?.user?.user_id;
@@ -132,6 +133,7 @@ export default function SignIn() {
                       {errorMessage}
                     </div>
                   )}
+                  <LuLogIn className="text-white" size={32} />
                   <div className="flex items-center justify-between gap-2 text-2xl font-bold my-8">
                     <h4 className="font-BeVietnam tracking-tight text-white"> Sign in</h4>
                     <Link
