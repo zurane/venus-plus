@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import UnsubscribePopUp from "../components/UnsubscribePopUp.js";
 import { Fragment } from "react";
 import { subscriptionsApiEndPoints } from "../services/api.js";
+import nodatarafiki from '../assets/data-rafiki.svg'
 import {
   PiDotsThreeVerticalBold,
   PiGearFine,
@@ -136,7 +137,6 @@ export default function Dashboard() {
 
   return (
     <Fragment>
-
       <div className="h-screen dashboard-bg">
         {isLoading ? (
           <SkeletonLoader subscriptions={data} />
@@ -260,6 +260,9 @@ export default function Dashboard() {
               {data.length === 0 ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
                   <div className="text-center flex items-center ">
+                    <div className="">
+                      <img src={nodatarafiki} alt="no data-rafiki" width={100} />
+                    </div>
                     <AddSubscriptionButton triggerModal={triggerFormModal} cta={'Add a subscription'} />
                   </div>
                 </div>

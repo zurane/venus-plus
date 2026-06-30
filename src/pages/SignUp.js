@@ -27,7 +27,7 @@ export default function SignUp() {
         },
       );
 
-      
+
       if (response && response.status === 201) {
         setIsLoading(true);
         setTimeout(() => {
