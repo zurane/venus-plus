@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import UnsubscribePopUp from "../components/UnsubscribePopUp.js";
 import { Fragment } from "react";
 import { subscriptionsApiEndPoints } from "../services/api.js";
-import nodatarafiki from '../assets/data-rafiki.svg'
+
 import {
   PiDotsThreeVerticalBold,
   PiGearFine,
@@ -172,7 +172,11 @@ export default function Dashboard() {
               </div>
               <div className="relative">
                 <div className="inline-flex gap-3 items-center">
-                  <AddSubscriptionButton triggerModal={triggerFormModal} cta={'Add a new subscription'} />
+                  <AddSubscriptionButton
+                    className={data.length === 0 ? 'invisible' : 'visible'}
+                    triggerModal={triggerFormModal}
+                    cta={'Add a new subscription'}
+                  />
                   <button
                     onClick={togglePopover}
                     className="p-2 rounded-full bg-white"
@@ -259,12 +263,8 @@ export default function Dashboard() {
               </h2>
               {data.length === 0 ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <div className="text-center items-center ">
-                    <div className="">
-                      <img src={nodatarafiki} alt="no data-rafiki" width={300} />
-                    </div>
-                    <AddSubscriptionButton triggerModal={triggerFormModal} cta={'Add a subscription'} />
-                  </div>
+                  <p className="text-white leading-tight">You currently dont any subscriptions</p>
+                  <AddSubscriptionButton triggerModal={triggerFormModal} cta={'Add a subscription'} />
                 </div>
               ) : (
                 <table className="w-full text-left border-collapse">
