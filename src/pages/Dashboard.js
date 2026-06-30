@@ -259,9 +259,9 @@ export default function Dashboard() {
               </h2>
               {data.length === 0 ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <div className="text-center flex items-center ">
+                  <div className="text-center items-center ">
                     <div className="">
-                      <img src={nodatarafiki} alt="no data-rafiki" width={100} />
+                      <img src={nodatarafiki} alt="no data-rafiki" width={300} />
                     </div>
                     <AddSubscriptionButton triggerModal={triggerFormModal} cta={'Add a subscription'} />
                   </div>
