@@ -133,7 +133,8 @@ export default function Dashboard() {
     fetchSubscriptions();
   }, []);
 
-  const data = subscriptions.data || []; // store the actual array of subscriptions for easier access
+  const data = subscriptions.data || [];
+  console.table(data) // store the actual array of subscriptions for easier access
 
   return (
     <Fragment>
@@ -172,11 +173,12 @@ export default function Dashboard() {
               </div>
               <div className="relative">
                 <div className="inline-flex gap-3 items-center">
-                  <AddSubscriptionButton
-                    className={data.length === 0 ? 'invisible' : 'visible'}
-                    triggerModal={triggerFormModal}
-                    cta={'Add a new subscription'}
-                  />
+                  <div className={data.length === 0 ? 'invisible' : 'visible'}>
+                    <AddSubscriptionButton
+                      triggerModal={triggerFormModal}
+                      cta={'Add a new subscription'}
+                    />
+                  </div>
                   <button
                     onClick={togglePopover}
                     className="p-2 rounded-full bg-white"
