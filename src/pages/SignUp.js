@@ -5,13 +5,14 @@ import { LuUserPlus } from "react-icons/lu";
 import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
 import axios from "axios";
+import { getAuthDataFromResponse, storeAuth } from "../services/helper.js";
 
 export default function SignUp() {
   const [apiErrors, setApiErrors] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [shake, setShake] = useState(false);
-  const [username, setUsername] = useState(" ");
+  const [username, setUsername] = useState("");
 
   const navigate = useNavigate();
 
@@ -19,6 +20,7 @@ export default function SignUp() {
     //Destructure form data
     const { name, email, password } = values;
     setApiErrors("");
+    setUsername(name);
     setIsFormSubmitting(true);
     try {
       const response = await axios.post(
@@ -29,7 +31,14 @@ export default function SignUp() {
           password,
         },
       );
-      setUsername(name);
+
+
+      const authData = getAuthDataFromResponse(response.data);
+      const authStored = storeAuth(response.data);
+      if (authStored) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${authData.token}`;
+      }
+
       if (response && response.status === 201) {
         setIsLoading(true);
         setTimeout(() => {
@@ -37,6 +46,8 @@ export default function SignUp() {
           navigate("/dashboard");
         }, 3000);
       }
+
+
     } catch (error) {
       setIsFormSubmitting(false);
       setShake(true);
@@ -63,7 +74,7 @@ export default function SignUp() {
                 <Loader />
               </div>
               <p className="text-sm text-gray-300 mt-4">
-                Welcome to {username}!
+                Welcome {username}!
               </p>
             </div>
           ) : (
@@ -105,7 +116,7 @@ export default function SignUp() {
                 isSubmitting,
               }) => (
                 <form
-                  className={`p-10 glassmorphism shadow-lg rounded`}
+                  className={`p-10 glassmorphism shadow-lg rounded ${shake ? "shake" : ""}`}
                   onSubmit={async (e) => {
                     e.preventDefault();
                     const formErrors = await validateForm();
@@ -162,7 +173,7 @@ export default function SignUp() {
                   </div>
                   <input
                     className="block py-4 px-1 w-96 bg-transparent border-b  border-white/20 text-white/50 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
-                    placeholder="Enter password"
+                    placeholder="Create a password"
                     type="password"
                     name="password"
                     onChange={handleChange}

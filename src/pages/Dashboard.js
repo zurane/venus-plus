@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import UnsubscribePopUp from "../components/UnsubscribePopUp.js";
 import { Fragment } from "react";
 import { subscriptionsApiEndPoints } from "../services/api.js";
+import { getStoredAuth } from "../services/helper.js";
 
 import {
   PiDotsThreeVerticalBold,
@@ -47,10 +48,11 @@ export default function Dashboard() {
   const submitSubscription = async (e) => {
     e.preventDefault();
     setSubscribing(true)
-    const venusAuth = JSON.parse(localStorage.getItem("venus_auth"));
+    const venusAuth = getStoredAuth();
     const id = venusAuth?.userId;
     if (!id) {
       console.error("User ID not found in local storage.");
+      setSubscribing(false);
       return; // Exit early if there's no ID
     }
     try {
@@ -97,7 +99,8 @@ export default function Dashboard() {
 
   const deleteSubscription = async (id) => {
     setDeletingId(id)
-    const subscriberId = JSON.parse(localStorage.getItem("venus_auth")).userId;
+    const venusAuth = getStoredAuth();
+    const subscriberId = venusAuth?.userId;
     try {
       const response = await subscriptionsApiEndPoints.delete(id);
       console.log(response);
@@ -110,14 +113,17 @@ export default function Dashboard() {
     }
   }
 
-  const userName = localStorage.getItem("venus_auth")
-    ? JSON.parse(localStorage.getItem("venus_auth")).name
-    : "Guest";
+  const userName = getStoredAuth()?.name || "Guest";
 
   React.useEffect(() => {
     setIsLoading(true);
-    const id = JSON.parse(localStorage.getItem("venus_auth")).userId;
+    const id = getStoredAuth()?.userId;
     const fetchSubscriptions = async () => {
+      if (!id) {
+        console.error("User ID not found in local storage.");
+        setIsLoading(false);
+        return;
+      }
       try {
         const res = await subscriptionsApiEndPoints.getSubData(id);
         console.table(res);
@@ -265,7 +271,7 @@ export default function Dashboard() {
               </h2>
               {data.length === 0 ? (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-                  <p className="text-white leading-tight">You currently dont any subscriptions</p>
+                  <p className="text-white leading-tight mb-2">You currently do not have any active subscriptions.</p>
                   <AddSubscriptionButton triggerModal={triggerFormModal} cta={'Add a subscription'} />
                 </div>
               ) : (
