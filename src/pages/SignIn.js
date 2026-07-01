@@ -64,7 +64,7 @@ export default function SignIn() {
           <img src={logo} className="App-logo" width={150} alt="logo" />
         </Link>
       </div>
-      <div className="">
+      <div>
         <div className="flex items-center justify-center h-screen bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
@@ -72,7 +72,7 @@ export default function SignIn() {
                 <Loader />
               </div>
               <p className="text-sm text-gray-300 mt-4">
-                {userName && `Welcome back ${userName}`}
+                {userName && `Welcome back ${userName}!`}
               </p>
             </div>
           ) : (
@@ -130,9 +130,8 @@ export default function SignIn() {
                       {errorMessage}
                     </div>
                   )}
-                  
+
                     <LuLogIn className="text-white" size={35} />
-                  
                   <div className="flex items-center justify-between gap-2 text-2xl font-bold my-8">
                     <h4 className="font-BeVietnam tracking-tight text-white"> Sign in</h4>
                     <Link
@@ -143,7 +142,7 @@ export default function SignIn() {
                     </Link>
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-sm mb-2 focus:outline-none focus:ring-0 text-white/50 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-md mb-2 focus:outline-none focus:ring-0 text-white/50 focus:border-blue-500"
                     placeholder="Enter email address"
                     type="email"
                     name="email"
@@ -155,7 +154,7 @@ export default function SignIn() {
                     {errors.email && touched.email && errors.email}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20   text-sm mb-2 focus:outline-none text-white/50 focus:ring-0 focus:border-blue-500  "
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20   text-md mb-2 focus:outline-none text-white/50 focus:ring-0 focus:border-blue-500  "
                     placeholder="Enter password"
                     type="password"
                     name="password"

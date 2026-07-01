@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { Link, useNavigate } from "react-router";
 import Loader from "../components/Loader.js";
-import { LuUserPlus } from "react-icons/lu";
+import { LuUserRoundPlus } from "react-icons/lu";
 import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
 import axios from "axios";
@@ -67,7 +67,7 @@ export default function SignUp() {
         </Link>
       </div>
       <div className="">
-        <div className="flex items-center justify-center h-screen bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay">
+        <div className="flex items-center justify-center h-screen  bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center py-12">
               <div>
@@ -116,7 +116,7 @@ export default function SignUp() {
                 isSubmitting,
               }) => (
                 <form
-                  className={`p-10 glassmorphism shadow-lg rounded ${shake ? "shake" : ""}`}
+                  className={`p-10 glassmorphism shadow-lg rounded-lg ${shake ? "shake" : ""}`}
                   onSubmit={async (e) => {
                     e.preventDefault();
                     const formErrors = await validateForm();
@@ -134,7 +134,7 @@ export default function SignUp() {
                       {apiErrors}
                     </div>
                   )}
-                  <LuUserPlus className="text-white" size={32} />
+                  <LuUserRoundPlus className="text-white" size={32} />
                   <div className="flex items-center justify-between gap-2 text-2xl font-bold my-8">
                     <h4 className="font-BeVietnam tracking-tight text-white">
                       {" "}
@@ -148,7 +148,7 @@ export default function SignUp() {
                     </Link>
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-white/50 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-white/50 text-md mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter full names"
                     type="text"
                     name="name"
@@ -160,7 +160,7 @@ export default function SignUp() {
                     {errors.name && touched.name && errors.name}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-white/50  text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-white/50  text-md mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Enter email address"
                     type="email"
                     name="email"
@@ -172,7 +172,7 @@ export default function SignUp() {
                     {errors.email && touched.email && errors.email}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b  border-white/20 text-white/50 text-sm mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
+                    className="block py-4 px-1 w-96 bg-transparent border-b  border-white/20 text-white/50 text-md mb-2 focus:outline-none focus:ring-0 focus:border-blue-500"
                     placeholder="Create a password"
                     type="password"
                     name="password"
