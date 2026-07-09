@@ -47,10 +47,12 @@ export default function SignIn() {
           navigate("/dashboard");
         }, 3000);
       }
+
     } catch (error) {
       setIsFormSubmitting(false);
-      setShake(true);
-      if (error.response && error.response.status === 401) {
+      if (error.status === 401) {
+
+        setShake(true);
         setErrorMessage("Invalid email or password. Please try again.");
       } else {
         setErrorMessage("User not found. Please enter valid credentials.");
@@ -134,7 +136,7 @@ export default function SignIn() {
 
                   <LuLogIn className="text-white" size={35} />
                   <div className="flex items-center justify-between gap-2 text-2xl font-bold my-8">
-                    <h4 className="font-BeVietnam tracking-tight text-white"> Sign in</h4>
+                    <h4 className="font-BeVietnam tracking-tight text-white">Sign in</h4>
                     <Link
                       to="/sign-up"
                       className="text-sm text-blue-500 cursor-pointer border-b-2 border-blue-500"
@@ -143,7 +145,7 @@ export default function SignIn() {
                     </Link>
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20 text-md mb-2 focus:outline-none focus:ring-0 text-white/50 focus:border-blue-500"
+                    className="block py-5 px-1 w-96 bg-transparent border-b border-white/20 text-md mb-2 focus:outline-none focus:ring-0 text-white/50 focus:border-blue-500"
                     placeholder="Enter email address"
                     type="email"
                     name="email"
@@ -155,7 +157,7 @@ export default function SignIn() {
                     {errors.email && touched.email && errors.email}
                   </div>
                   <input
-                    className="block py-4 px-1 w-96 bg-transparent border-b border-white/20   text-md mb-2 focus:outline-none text-white/50 focus:ring-0 focus:border-blue-500  "
+                    className="block py-5 px-1 w-96 bg-transparent border-b border-white/20   text-md mb-2 focus:outline-none text-white/50 focus:ring-0 focus:border-blue-500  "
                     placeholder="Enter password"
                     type="password"
                     name="password"
@@ -169,7 +171,7 @@ export default function SignIn() {
                   </div>
                   <div className="text-center">
                     <button
-                      className="rounded-full hover:cursor-pointer w-96 shadow-md bg-gradient-to-r from-[#095ae6] to-[#062794] px-9 py-3 font-BeVietnam font-bold text-white my-5 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="rounded-lg hover:cursor-pointer w-96 shadow-md bg-gradient-to-r from-[#095ae6] to-[#062794] px-10 py-4 font-BeVietnam font-bold text-white my-5 disabled:opacity-50 disabled:cursor-not-allowed"
                       type="submit"
                       disabled={isFormSubmitting}
                     >
