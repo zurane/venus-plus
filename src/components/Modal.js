@@ -12,8 +12,8 @@ export default function Modal() {
                 <h3 className="text-xl font-semibold text-slate-800">
                     Account created successfully
                 </h3>
-                <p className="mt-2 text-md text-slate-600">
-                    Your account is ready. Continue to sign in to access your dashboard.
+                <p className="mt-2 text-lg text-slate-600">
+                    Please sign in below to access your dashboard.
                 </p>
                 <button
                     type="button"
