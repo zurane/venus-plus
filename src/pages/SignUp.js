@@ -32,11 +32,11 @@ export default function SignUp() {
         },
       );
       console.log("Signup response:", response.data);
-
       if (response && response.status === 201) {
         setIsFormSubmitting(false);
         setShowConfirmationModal(true);
       }
+      console.log("Signup response status:", response.status);
       console.log("Signup successful for:", name, email);
     } catch (error) {
       setIsFormSubmitting(false);
