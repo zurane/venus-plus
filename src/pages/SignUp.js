@@ -21,7 +21,9 @@ export default function SignUp() {
     const { name, email, password } = values;
     setApiErrors("");
     setUsername(name);
+
     setIsFormSubmitting(true);
+    console.log("Starting signup process for:", name, email);
     try {
       const response = await axios.post(
         SIGNUP_BASE,
@@ -32,7 +34,7 @@ export default function SignUp() {
         },
       );
 
-
+      console.log("Signup response:", response.data);
       const authData = getAuthDataFromResponse(response.data);
       const authStored = storeAuth(response.data);
       if (authStored) {
@@ -43,7 +45,7 @@ export default function SignUp() {
         setIsFormSubmitting(false);
         setShowConfirmationModal(true);
       }
-
+      console.log("Signup successful for:", name, email);
 
     } catch (error) {
       setIsFormSubmitting(false);
