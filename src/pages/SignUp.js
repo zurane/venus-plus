@@ -16,7 +16,7 @@ export default function SignUp() {
   const SIGNUP_BASE = process.env.REACT_APP_SIGNUP_BASE;
 
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, resetForm) => {
     //Destructure form data
     const { name, email, password } = values;
     setApiErrors("");
@@ -32,10 +32,8 @@ export default function SignUp() {
         },
       );
       console.log("Signup response:", response.data);
-      
-        setIsFormSubmitting(false);
-        setShowConfirmationModal(true);
-      
+      setIsFormSubmitting(false);
+      setShowConfirmationModal(true);
       console.log("Signup response status:", response.status);
       console.log("Signup successful for:", name, email);
     } catch (error) {
@@ -94,8 +92,7 @@ export default function SignUp() {
                 return errors;
               }}
               onSubmit={(values, { resetForm }) => {
-                handleSubmit(values);
-                resetForm();
+                handleSubmit(values, resetForm);
               }}
             >
               {({
