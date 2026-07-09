@@ -58,7 +58,7 @@ export default function SignUp() {
       <div>
         <div className="flex items-center justify-center h-screen  bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay">
           {showConfirmationModal ? (
-            <Modal />
+            <Modal username={values.name} />
           ) : isFormSubmitting ? (
             <div className="flex flex-col items-center justify-center rounded-2xl bg-white/10 px-10 py-12 text-center shadow-xl backdrop-blur">
               <Loader />
