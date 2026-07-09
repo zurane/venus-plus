@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import { Link, useNavigate } from "react-router";
+import { LuUserRoundPlus, LuCircleCheck } from "react-icons/lu";
 import Loader from "../components/Loader.js";
-import { LuUserRoundPlus } from "react-icons/lu";
 import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
 import axios from "axios";
@@ -9,11 +9,11 @@ import { getAuthDataFromResponse, storeAuth } from "../services/helper.js";
 
 export default function SignUp() {
   const [apiErrors, setApiErrors] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
   const [shake, setShake] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [username, setUsername] = useState("");
-
+  const SIGNUP_BASE = process.env.REACT_APP_SIGNUP_BASE;
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
@@ -24,7 +24,7 @@ export default function SignUp() {
     setIsFormSubmitting(true);
     try {
       const response = await axios.post(
-        "https://subscription-tracker-api-e5u0.onrender.com/api/v1/auth/sign-up",
+        SIGNUP_BASE,
         {
           name,
           email,
@@ -40,11 +40,8 @@ export default function SignUp() {
       }
 
       if (response && response.status === 201) {
-        setIsLoading(true);
-        setTimeout(() => {
-          setIsLoading(false);
-          navigate("/dashboard");
-        }, 3000);
+        setIsFormSubmitting(false);
+        setShowConfirmationModal(true);
       }
 
 
@@ -66,15 +63,35 @@ export default function SignUp() {
           <img src={logo} className="App-logo" width={150} alt="logo" />
         </Link>
       </div>
+
       <div className="">
         <div className="flex items-center justify-center h-screen  bg-blue-500 bg-clip-padding backdrop-filter backdrop-blur bg-opacity-10 backdrop-saturate-100 backdrop-contrast-100 bg-blend-overlay">
-          {isLoading ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div>
-                <Loader />
+          {showConfirmationModal ? (
+            <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 px-4">
+              <div className="relative z-[80] w-full max-w-md rounded-2xl bg-white p-8 text-center shadow-2xl">
+                <div className="mb-4 flex justify-center">
+                  <LuCircleCheck size={52} color="green" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-800">
+                  Account created successfully
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Your account is ready. Continue to sign in to access your dashboard.
+                </p>
+                <button
+                  type="button"
+                  className="mt-6 rounded-full bg-gradient-to-r from-[#095ae6] to-[#062794] px-8 py-3 font-semibold text-white shadow-md hover:cursor-pointer"
+                  onClick={() => navigate("/sign-in")}
+                >
+                  Continue to Sign In
+                </button>
               </div>
-              <p className="text-sm text-gray-300 mt-4">
-                Welcome {username}!
+            </div>
+          ) : isFormSubmitting ? (
+            <div className="flex flex-col items-center justify-center rounded-2xl bg-white/10 px-10 py-12 text-center shadow-xl backdrop-blur">
+              <Loader />
+              <p className="mt-4 text-sm text-gray-200">
+                Creating your account. Please wait...
               </p>
             </div>
           ) : (
