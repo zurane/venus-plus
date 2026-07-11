@@ -51,7 +51,6 @@ export default function SignIn() {
     } catch (error) {
       setIsFormSubmitting(false);
       if (error.status === 401) {
-
         setShake(true);
         setErrorMessage("Invalid email or password. Please try again.");
       } else {

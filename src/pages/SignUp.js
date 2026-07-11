@@ -6,6 +6,7 @@ import Loader from "../components/Loader.js";
 import logo from "../assets/venus_logo.svg";
 import { useState } from "react";
 import axios from "axios";
+import { getAuthDataFromResponse, storeAuth } from "../services/helper.js";
 
 
 export default function SignUp() {
@@ -31,11 +32,22 @@ export default function SignUp() {
           password,
         },
       );
-      console.log("Signup response:", response.data);
+      
+      console.log("Signup response status:", response.status);
+      const Userdata = response.data;
+      console.log("User data from API:", Userdata);
+
+      const authData = getAuthDataFromResponse(Userdata);
+      const authStored = storeAuth(Userdata);
+
+      if (authStored) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${authData.token}`;
+      }
+
+  
       setIsFormSubmitting(false);
       setShowConfirmationModal(true);
-      console.log("Signup response status:", response.status);
-      console.log("Signup successful for:", name, email);
+
     } catch (error) {
       setIsFormSubmitting(false);
       setShake(true);
